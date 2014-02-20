@@ -4,6 +4,44 @@
             [c2.svg :as svg]
             [c2.core :as c2]))
 
+;(comment
+;  "the tree for S -> SS | (S) | ()"
+  (def root
+    {:node "S"
+     :children [{:node "S"
+                 :children [{:node "("} 
+                            {:node "S" 
+                             :children [{:node "("} 
+                                        {:node ")"}]}
+                            {:node ")"}]}
+                {:node "S"
+                 :children [{:node "("}
+                            {:node ")"}]}]})
+
+(defn get-center [nodes]
+  (let [a (first nodes)
+        b (last nodes)]
+    (/ (+ (:x a) (:x b)) 2.0)))
+
+(defn bind-location 
+  ([root] 
+   (bind-location root 0 (atom -1)))
+  ([node lvl right-most]
+   "add relative position to each tree's node such that 
+    root is at y=0, left-most node is at x=0, and each new leaf
+    we visit will have x=1,2,3,..."
+   (if (contains? node :children)
+     (let [children (map #(bind-location % (inc lvl) right-most) (:children node))]
+       (assoc node 
+              :children children
+              :x (get-center children)
+              :y lvl))
+     (do
+       (swap! right-most inc)
+       (assoc node :x @right-most :y lvl)))))
+
+(pp (bind-location root))
+
 (repl/connect "http://betalabs:9000/repl")
 ;(repl/connect "http://localhost:9000/repl")
 
@@ -46,7 +84,7 @@
 (let [data (atom [0])
       random-update (fn []
                       (let [r (rand)]
-                        (p (str r))
+                        ;(p (str r))
                         (reset! data [r])))
                         ;(swap! data assoc 0 r)))
       ]

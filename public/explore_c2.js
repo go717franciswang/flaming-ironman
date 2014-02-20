@@ -35140,47 +35140,85 @@ goog.require("c2.svg");
 goog.require("c2.svg");
 goog.require("clojure.browser.repl");
 goog.require("clojure.browser.repl");
+explore_c2.core.root = new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null, "node", "node", 1017291124), "S", new cljs.core.Keyword(null, "children", "children", 2673430897), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null, "node", "node", 1017291124), "S", new cljs.core.Keyword(null, "children", "children", 2673430897), new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, 
+[new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "node", "node", 1017291124), "("], null), new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null, "node", "node", 1017291124), "S", new cljs.core.Keyword(null, "children", "children", 2673430897), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "node", "node", 1017291124), "("], null), new cljs.core.PersistentArrayMap(null, 
+1, [new cljs.core.Keyword(null, "node", "node", 1017291124), ")"], null)], null)], null), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "node", "node", 1017291124), ")"], null)], null)], null), new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null, "node", "node", 1017291124), "S", new cljs.core.Keyword(null, "children", "children", 2673430897), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentArrayMap(null, 
+1, [new cljs.core.Keyword(null, "node", "node", 1017291124), "("], null), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "node", "node", 1017291124), ")"], null)], null)], null)], null)], null);
+explore_c2.core.get_center = function get_center(nodes) {
+  var a = cljs.core.first.call(null, nodes);
+  var b = cljs.core.last.call(null, nodes);
+  return((new cljs.core.Keyword(null, "x", "x", 1013904362)).cljs$core$IFn$_invoke$arity$1(a) + (new cljs.core.Keyword(null, "x", "x", 1013904362)).cljs$core$IFn$_invoke$arity$1(b)) / 2;
+};
+explore_c2.core.bind_location = function() {
+  var bind_location = null;
+  var bind_location__1 = function(root) {
+    return bind_location.call(null, root, 0, cljs.core.atom.call(null, -1));
+  };
+  var bind_location__3 = function(node, lvl, right_most) {
+    if (cljs.core.contains_QMARK_.call(null, node, new cljs.core.Keyword(null, "children", "children", 2673430897))) {
+      var children = cljs.core.map.call(null, function(p1__5095_SHARP_) {
+        return bind_location.call(null, p1__5095_SHARP_, lvl + 1, right_most);
+      }, (new cljs.core.Keyword(null, "children", "children", 2673430897)).cljs$core$IFn$_invoke$arity$1(node));
+      return cljs.core.assoc.call(null, node, new cljs.core.Keyword(null, "children", "children", 2673430897), children, new cljs.core.Keyword(null, "x", "x", 1013904362), explore_c2.core.get_center.call(null, children), new cljs.core.Keyword(null, "y", "y", 1013904363), lvl);
+    } else {
+      cljs.core.swap_BANG_.call(null, right_most, cljs.core.inc);
+      return cljs.core.assoc.call(null, node, new cljs.core.Keyword(null, "x", "x", 1013904362), cljs.core.deref.call(null, right_most), new cljs.core.Keyword(null, "y", "y", 1013904363), lvl);
+    }
+  };
+  bind_location = function(node, lvl, right_most) {
+    switch(arguments.length) {
+      case 1:
+        return bind_location__1.call(this, node);
+      case 3:
+        return bind_location__3.call(this, node, lvl, right_most);
+    }
+    throw new Error("Invalid arity: " + arguments.length);
+  };
+  bind_location.cljs$core$IFn$_invoke$arity$1 = bind_location__1;
+  bind_location.cljs$core$IFn$_invoke$arity$3 = bind_location__3;
+  return bind_location;
+}();
+var res__4353__auto___5096 = explore_c2.core.bind_location.call(null, explore_c2.core.root);
+console.log(cljs.core.prn_str.call(null, res__4353__auto___5096));
 clojure.browser.repl.connect.call(null, "http://betalabs:9000/repl");
-var co__4386__auto___5492 = function() {
+var co__4386__auto___5099 = function() {
   var co__4331__auto__ = new reflex.core.ComputedObservable(null, true, function() {
-    return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div#mydiv", "div#mydiv", 1721183333), c2.core.unify.call(null, new cljs.core.PersistentArrayMap(null, 1, ["a", 1], null), function(p__5490) {
-      var vec__5491 = p__5490;
-      var k = cljs.core.nth.call(null, vec__5491, 0, null);
-      var v = cljs.core.nth.call(null, vec__5491, 1, null);
+    return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div#mydiv", "div#mydiv", 1721183333), c2.core.unify.call(null, new cljs.core.PersistentArrayMap(null, 1, ["a", 1], null), function(p__5097) {
+      var vec__5098 = p__5097;
+      var k = cljs.core.nth.call(null, vec__5098, 0, null);
+      var v = cljs.core.nth.call(null, vec__5098, 1, null);
       return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div", "div", 1014003715), k, v], null);
     })], null);
   }, cljs.core.gensym.call(null, "computed-observable"), cljs.core.PersistentArrayMap.EMPTY, cljs.core.PersistentArrayMap.EMPTY);
   cljs.core.deref.call(null, co__4331__auto__);
   return co__4331__auto__;
 }();
-var $el__4387__auto___5493 = c2.dom.__GT_dom.call(null, "#mydiv");
-singult.core.merge_BANG_.call(null, $el__4387__auto___5493, cljs.core.deref.call(null, co__4386__auto___5492));
-cljs.core.add_watch.call(null, co__4386__auto___5492, new cljs.core.Keyword(null, "update-dom", "update-dom", 716806576), function() {
-  return singult.core.merge_BANG_.call(null, $el__4387__auto___5493, cljs.core.deref.call(null, co__4386__auto___5492));
+var $el__4387__auto___5100 = c2.dom.__GT_dom.call(null, "#mydiv");
+singult.core.merge_BANG_.call(null, $el__4387__auto___5100, cljs.core.deref.call(null, co__4386__auto___5099));
+cljs.core.add_watch.call(null, co__4386__auto___5099, new cljs.core.Keyword(null, "update-dom", "update-dom", 716806576), function() {
+  return singult.core.merge_BANG_.call(null, $el__4387__auto___5100, cljs.core.deref.call(null, co__4386__auto___5099));
 });
-var data_5494 = cljs.core.atom.call(null, new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [0], null));
-var random_update_5495 = function(data_5494) {
+var data_5101 = cljs.core.atom.call(null, new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [0], null));
+var random_update_5102 = function(data_5101) {
   return function() {
     var r = cljs.core.rand.call(null);
-    var res__4347__auto___5496 = [cljs.core.str(r)].join("");
-    console.log(res__4347__auto___5496);
-    return cljs.core.reset_BANG_.call(null, data_5494, new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [r], null));
+    return cljs.core.reset_BANG_.call(null, data_5101, new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [r], null));
   };
-}(data_5494);
-var co__4386__auto___5497 = function() {
+}(data_5101);
+var co__4386__auto___5103 = function() {
   var co__4331__auto__ = new reflex.core.ComputedObservable(null, true, function() {
-    return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div#mydiv", "div#mydiv", 1721183333), c2.core.unify.call(null, cljs.core.deref.call(null, data_5494), function(v) {
+    return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div#mydiv", "div#mydiv", 1721183333), c2.core.unify.call(null, cljs.core.deref.call(null, data_5101), function(v) {
       return new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div", "div", 1014003715), v], null);
     })], null);
   }, cljs.core.gensym.call(null, "computed-observable"), cljs.core.PersistentArrayMap.EMPTY, cljs.core.PersistentArrayMap.EMPTY);
   cljs.core.deref.call(null, co__4331__auto__);
   return co__4331__auto__;
 }();
-var $el__4387__auto___5498 = c2.dom.__GT_dom.call(null, "#mydiv");
-singult.core.merge_BANG_.call(null, $el__4387__auto___5498, cljs.core.deref.call(null, co__4386__auto___5497));
-cljs.core.add_watch.call(null, co__4386__auto___5497, new cljs.core.Keyword(null, "update-dom", "update-dom", 716806576), function() {
-  return singult.core.merge_BANG_.call(null, $el__4387__auto___5498, cljs.core.deref.call(null, co__4386__auto___5497));
+var $el__4387__auto___5104 = c2.dom.__GT_dom.call(null, "#mydiv");
+singult.core.merge_BANG_.call(null, $el__4387__auto___5104, cljs.core.deref.call(null, co__4386__auto___5103));
+cljs.core.add_watch.call(null, co__4386__auto___5103, new cljs.core.Keyword(null, "update-dom", "update-dom", 716806576), function() {
+  return singult.core.merge_BANG_.call(null, $el__4387__auto___5104, cljs.core.deref.call(null, co__4386__auto___5103));
 });
 setInterval(function() {
-  return random_update_5495.call(null);
+  return random_update_5102.call(null);
 }, 1E3);
