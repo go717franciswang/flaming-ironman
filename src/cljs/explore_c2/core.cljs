@@ -4,19 +4,17 @@
             [c2.svg :as svg]
             [c2.core :as c2]))
 
-;(comment
-;  "the tree for S -> SS | (S) | ()"
-  (def root
-    {:node "S"
-     :children [{:node "S"
-                 :children [{:node "("} 
-                            {:node "S" 
-                             :children [{:node "("} 
-                                        {:node ")"}]}
-                            {:node ")"}]}
-                {:node "S"
-                 :children [{:node "("}
-                            {:node ")"}]}]})
+(def root
+  {:node "S"
+   :children [{:node "S"
+               :children [{:node "("} 
+                          {:node "S" 
+                           :children [{:node "("} 
+                                      {:node ")"}]}
+                          {:node ")"}]}
+              {:node "S"
+               :children [{:node "("}
+                          {:node ")"}]}]})
 
 (defn get-center [nodes]
   (let [a (first nodes)
@@ -40,10 +38,50 @@
        (swap! right-most inc)
        (assoc node :x @right-most :y lvl)))))
 
-(pp (bind-location root))
+(defn get-max [node]
+  (pp node)
+  (loop [x (:x node)
+         y (:y node)
+         i 0]
+    (if (and (contains? node :children) (< i (count (:children node))))
+      (let [[x1 y1] (get-max (get i (:children node)))]
+        (recur (max x x1) (max y y1) (inc y)))
+      [(:x node) (:y node)])))
 
-(repl/connect "http://betalabs:9000/repl")
-;(repl/connect "http://localhost:9000/repl")
+(def unit-width 50)
+(def unit-height 50)
+
+(p "hi")
+
+(defn get-lines [parent-node children-nodes]
+  (loop [i 0
+         lines []]
+    (if (>= i (count children-nodes))
+      lines
+      (let [node (get i children-nodes)
+            x1 (* (:x parent-node) unit-width)
+            y1 (* (:y parent-node) unit-height)
+            x2 (* (:x node) unit-width)
+            y2 (* (:y node) unit-height)
+            line [:line {:x1 x1 :x2 x2 :y1 y1 :y2 y2}]
+            lines (conj lines line)]
+        (if (contains? node :children)
+          (recur (inc i) (into lines (get-lines node (:children node))))
+          (recur (inc i) lines))))))
+
+#_(pp
+(let [tree (bind-location root)
+      [max-x max-y] (get-max tree)
+      width (* (inc max-x) unit-width)
+      height (* (inc max-y) unit-height)
+      lines (get-lines tree (:children tree))]
+  ;(bind! "#tree"
+         [:svg#tree lines {:height height :width width}]))
+
+#_(pp (bind-location root))
+
+;(repl/connect "http://betalabs:9000/repl")
+(repl/connect "http://localhost:9000/repl")
 
 ; (def coordinate 
 ;   {:x 100 :y 200})
