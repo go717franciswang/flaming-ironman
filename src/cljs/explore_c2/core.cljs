@@ -39,49 +39,57 @@
        (assoc node :x @right-most :y lvl)))))
 
 (defn get-max [node]
-  (pp node)
-  (loop [x (:x node)
-         y (:y node)
-         i 0]
-    (if (and (contains? node :children) (< i (count (:children node))))
-      (let [[x1 y1] (get-max (get i (:children node)))]
-        (recur (max x x1) (max y y1) (inc y)))
-      [(:x node) (:y node)])))
+  (if (contains? node :children)
+    (reduce 
+      (fn [[x y] [x1 y1]]
+        [(max x x1) (max y y1)])
+      [(:x node) (:y node)]
+      (map get-max (:children node)))
+    [(:x node) (:y node)]))
 
 (def unit-width 50)
 (def unit-height 50)
 
-(p "hi")
-
 (defn get-lines [parent-node children-nodes]
-  (loop [i 0
-         lines []]
-    (if (>= i (count children-nodes))
-      lines
-      (let [node (get i children-nodes)
-            x1 (* (:x parent-node) unit-width)
+  (reduce
+    (fn [lines child]
+      (let [x1 (* (:x parent-node) unit-width)
             y1 (* (:y parent-node) unit-height)
-            x2 (* (:x node) unit-width)
-            y2 (* (:y node) unit-height)
-            line [:line {:x1 x1 :x2 x2 :y1 y1 :y2 y2}]
+            x2 (* (:x child) unit-width)
+            y2 (* (:y child) unit-height)
+            dx (- x2 x1)
+            dy (- y2 y1)
+            m (/ dy dx)
+            h 10
+            x12 (+ x1 (/ h m))
+            y12 (+ y1 h)
+            x22 (- x2 (/ h m))
+            y22 (- y2 h)
+            line [:line {:x1 x12 :x2 x22 :y1 y12 :y2 y22
+                         :style {:stroke "#000000"
+                                 :stroke-width 2}}]
             lines (conj lines line)]
-        (if (contains? node :children)
-          (recur (inc i) (into lines (get-lines node (:children node))))
-          (recur (inc i) lines))))))
+        (if (contains? child :children)
+          (into lines (get-lines child (:children child)))
+          lines)))
+    []
+    children-nodes))
 
-#_(pp
+(let [tree (bind-location root)]
+  (pp (get-lines tree (:children tree))))
+
 (let [tree (bind-location root)
       [max-x max-y] (get-max tree)
       width (* (inc max-x) unit-width)
       height (* (inc max-y) unit-height)
-      lines (get-lines tree (:children tree))]
-  ;(bind! "#tree"
-         [:svg#tree lines {:height height :width width}]))
+      lines (get-lines tree (:children tree))
+      svg-ele [:svg#tree {:height height :width width}]]
+  (bind! "#tree" (into svg-ele lines)))
 
 #_(pp (bind-location root))
 
-;(repl/connect "http://betalabs:9000/repl")
-(repl/connect "http://localhost:9000/repl")
+(repl/connect "http://betalabs:9000/repl")
+;(repl/connect "http://localhost:9000/repl")
 
 ; (def coordinate 
 ;   {:x 100 :y 200})
