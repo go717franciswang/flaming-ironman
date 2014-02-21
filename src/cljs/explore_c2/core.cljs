@@ -53,10 +53,10 @@
 (defn get-lines [parent-node children-nodes]
   (reduce
     (fn [lines child]
-      (let [x1 (* (:x parent-node) unit-width)
-            y1 (* (:y parent-node) unit-height)
-            x2 (* (:x child) unit-width)
-            y2 (* (:y child) unit-height)
+      (let [x1 (* (inc (:x parent-node)) unit-width)
+            y1 (* (inc (:y parent-node)) unit-height)
+            x2 (* (inc (:x child)) unit-width)
+            y2 (* (inc (:y child)) unit-height)
             dx (- x2 x1)
             dy (- y2 y1)
             m (/ dy dx)
@@ -75,18 +75,13 @@
     []
     children-nodes))
 
-(let [tree (bind-location root)]
-  (pp (get-lines tree (:children tree))))
-
 (let [tree (bind-location root)
       [max-x max-y] (get-max tree)
-      width (* (inc max-x) unit-width)
-      height (* (inc max-y) unit-height)
+      width (* (+ 2 max-x) unit-width)
+      height (* (+ 2 max-y) unit-height)
       lines (get-lines tree (:children tree))
       svg-ele [:svg#tree {:height height :width width}]]
   (bind! "#tree" (into svg-ele lines)))
-
-#_(pp (bind-location root))
 
 (repl/connect "http://betalabs:9000/repl")
 ;(repl/connect "http://localhost:9000/repl")
