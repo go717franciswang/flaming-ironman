@@ -49,18 +49,21 @@
 
 (def unit-width 50)
 (def unit-height 50)
+(def text-height 20)
+
+(defn get-scaled-pt [node]
+  [(* (inc (:x node)) unit-width)
+   (* (inc (:y node)) unit-height)])
 
 (defn get-lines [parent-node children-nodes]
   (reduce
     (fn [lines child]
-      (let [x1 (* (inc (:x parent-node)) unit-width)
-            y1 (* (inc (:y parent-node)) unit-height)
-            x2 (* (inc (:x child)) unit-width)
-            y2 (* (inc (:y child)) unit-height)
+      (let [[x1 y1] (get-scaled-pt parent-node)
+            [x2 y2] (get-scaled-pt child)
             dx (- x2 x1)
             dy (- y2 y1)
             m (/ dy dx)
-            h 10
+            h (/ text-height 2)
             x12 (+ x1 (/ h m))
             y12 (+ y1 h)
             x22 (- x2 (/ h m))
@@ -75,13 +78,27 @@
     []
     children-nodes))
 
+(defn get-legends [node]
+  (let [[x y] (get-scaled-pt node)
+        text (:node node)
+        legends [[:text {:x x :y (+ y (/ text-height 4)) :text-anchor "middle" :fill "black"} text]]]
+    (if (contains? node :children)
+      (reduce
+        (fn [legends child]
+          (into legends (get-legends child)))
+        legends
+        (:children node))
+      legends)))
+
 (let [tree (bind-location root)
       [max-x max-y] (get-max tree)
       width (* (+ 2 max-x) unit-width)
       height (* (+ 2 max-y) unit-height)
       lines (get-lines tree (:children tree))
+      legends (get-legends tree)
       svg-ele [:svg#tree {:height height :width width}]]
-  (bind! "#tree" (into svg-ele lines)))
+  (pp legends)
+  (bind! "#tree" (vec (concat svg-ele lines legends))))
 
 (repl/connect "http://betalabs:9000/repl")
 ;(repl/connect "http://localhost:9000/repl")
