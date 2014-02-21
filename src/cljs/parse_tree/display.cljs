@@ -1,4 +1,4 @@
-(ns explore-c2.core
+(ns parse-tree.display
   (:use-macros [c2.util :only [p pp bind! interval]])
   (:require [clojure.browser.repl :as repl]
             [c2.svg :as svg]

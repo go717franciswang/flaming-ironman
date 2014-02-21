@@ -1,4 +1,4 @@
-(defproject explore-c2 "0.1.0-SNAPSHOT"
+(defproject parse-tree "0.1.0-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
@@ -10,6 +10,6 @@
   :plugins [[lein-cljsbuild "1.0.1"]]
   :cljsbuild {
               :builds [{:source-paths ["src/cljs"]
-                       :compiler {:output-to "public/explore_c2.js"
+                       :compiler {:output-to "public/parse_tree.js"
                                   :optimizations :whitespace
                                   :pretty-print true}}]})

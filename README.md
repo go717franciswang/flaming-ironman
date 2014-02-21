@@ -1,6 +1,6 @@
-# explore-c2
+# parse-tree
 
-Explore basic functionalities of [C2]
+* Display parse tree with [C2]
 
 ## Development
 
