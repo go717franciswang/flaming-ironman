@@ -9,6 +9,10 @@ lein cljsbuild auto
 rlwrap -r -m -q '\\"' -b "(){}[],^%3@\\\";:'" lein trampoline cljsbuild repl-listen
 ```
 
+### TODO
+* c2's bind function raises exception when tree changes in structure. Find a way to
+  solve it.
+
 ## License
 
 Copyright © 2014 FIXME

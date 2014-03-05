@@ -1,6 +1,7 @@
 (ns parse-tree.display
   (:use-macros [c2.util :only [p pp bind! interval]])
   (:require [clojure.browser.repl :as repl]
+            [clojure.walk :as w]
             [c2.svg :as svg]
             [c2.core :as c2]))
 
@@ -91,6 +92,11 @@
         svg-ele [:svg {:height height :width width}]]
     (bind! container-selector [container-nodename (vec (concat svg-ele lines legends))])))
 
+(defn ^:export draw-tree-js [root-js container-selector]
+  (let [root (w/keywordize-keys (js->clj root-js))]
+    (pp root)
+    (draw-tree root container-selector)))
+
 (defn ^:export demo []
   (let [root {:node "S"
               :children [{:node "S"
@@ -105,5 +111,5 @@
     (draw-tree root "#tree")))
 
 ;(repl/connect "http://betalabs:9000/repl" )
-;(repl/connect "http://localhost:9000/repl")
+(repl/connect "http://localhost:9000/repl")
 
